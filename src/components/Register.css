@@ -1,0 +1,23 @@
+.hide {
+    display: none;
+  }
+  
+  .shadowed-square {
+    background-color: #fff; /* Background color for the square */
+    border-radius: 15px; /* Rounded edges */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    padding: 20px; /* Optional padding inside the square */
+    margin: auto; /* Center horizontally */
+    max-width: 400px; /* Optional maximum width for the square */
+    width: 100%; /* Make the square responsive */
+  }
+
+  .labelIcon {
+    margin-right: 10px; /* Adjust the margin to control the space */
+  }
+
+  .centered {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+  }
