@@ -3,7 +3,7 @@ import StudentsPage from "./components/StudentsPage";
 import api from "./api/axiosConfig";
 import { useState, useEffect } from "react";
 import Register from "./components/Register";
-import Login from "./components/login";
+import Login from "./components/Login";
 
 export type Students = {
   id?: Number;
