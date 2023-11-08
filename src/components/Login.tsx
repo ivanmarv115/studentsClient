@@ -11,18 +11,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import api from "../api/axiosConfig";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "./Register.css";
+import { useNavigate } from "react-router-dom";
 
 const LOGIN_URL = "api/v1/auth/authenticate";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const userRef = useRef<any>();
   const errRef = useRef<any>();
 
   const [user, setUser] = useState("");
-  const [userFocus, setUserFocus] = useState(false);
-
   const [pwd, setPwd] = useState("");
-  const [pwdFocus, setPwdFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
@@ -40,13 +40,9 @@ const Login = () => {
       };
 
       const response = await api.post(LOGIN_URL, formData);
-      console.log(response?.data);
-      console.log(JSON.stringify(response));
       setSuccess(true);
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
-      setUser("");
-      setPwd("");
+      localStorage.setItem("token", response.data.token);
+      navigate("/students");
     } catch (err: any) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -63,15 +59,12 @@ const Login = () => {
     <Container fluid className="form-container">
       <Row className="justify-content-center align-items-center vh-100">
         <Col md={6}>
-          {success ? (
-            <>
-              <h1>Success!</h1>
-              <p>
-                <a href="#">Sign In</a>
-              </p>
-            </>
-          ) : (
-            <div className="shadowed-square">
+          <div className="shadowed-square">
+            {success ? (
+              <>
+                <h1>Success!</h1>
+              </>
+            ) : (
               <Form onSubmit={handleSubmit}>
                 <p
                   ref={errRef}
@@ -97,8 +90,6 @@ const Login = () => {
                     value={user}
                     required
                     aria-describedby="uidnote"
-                    onFocus={() => setUserFocus(true)}
-                    onBlur={() => setUserFocus(false)}
                     className={"mb-3"}
                   />
                 </Form.Group>
@@ -116,8 +107,6 @@ const Login = () => {
                     value={pwd}
                     required
                     aria-describedby="pwdnote"
-                    onFocus={() => setPwdFocus(true)}
-                    onBlur={() => setPwdFocus(false)}
                     className={"mb-3"}
                   />
                 </Form.Group>
@@ -136,8 +125,8 @@ const Login = () => {
                   </p>
                 </div>
               </Form>
-            </div>
-          )}
+            )}
+          </div>
         </Col>
       </Row>
     </Container>
