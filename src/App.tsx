@@ -1,9 +1,8 @@
 import Header from "./components/Header";
 import StudentsPage from "./components/StudentsPage";
-import api from "./api/axiosConfig";
-import { useState, useEffect } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 export type Students = {
   id?: Number;
@@ -14,29 +13,13 @@ export type Students = {
 };
 
 const App = () => {
-  const [students, setStudents] = useState<Students | null>(null);
-
-  const getStudents = async () => {
-    try {
-      const response = await api.get("/students");
-      setStudents(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getStudents();
-  }, []);
-
   return (
-    <Login />
-    /*
-    <div>
-      <Header />
-      <StudentsPage />
-    </div>
-    */
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/students" element={<StudentsPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

@@ -1,13 +1,16 @@
 import "./StudentsPage.css";
-import { Table, Button, Form, Row, Col, Container } from "react-bootstrap";
+import { Table, Form, Row, Col, Container } from "react-bootstrap";
 import { Students } from "../App";
 import api from "../api/axiosConfig";
 import { useState, useEffect } from "react";
 import FilterComponent from "./SearchBy";
 import AddStudentForm from "./AddStudentForm";
 import StudentsList from "./StudentsList";
+import { useNavigate } from "react-router-dom";
 
 const StudentsPage = (): JSX.Element => {
+  const navigate = useNavigate();
+
   //List of students from api
   const [students, setStudents] = useState<Students[]>([]);
 
@@ -32,10 +35,25 @@ const StudentsPage = (): JSX.Element => {
 
   const getStudents = async () => {
     try {
-      const response = await api.get("/students");
-      setStudents(response.data);
-    } catch (err) {
-      console.log(err);
+      const token = localStorage.getItem("token");
+      if (token !== null && token !== "") {
+        console.log(token);
+        const response = await api.get("/students", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setStudents(response.data);
+      } else {
+        navigate("/");
+      }
+    } catch (err: any) {
+      console.log("error:" + err);
+      if (err.response?.status === 403) {
+        localStorage.setItem("token", "");
+        navigate("/");
+      }
     }
   };
 
