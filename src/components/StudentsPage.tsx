@@ -37,10 +37,10 @@ const StudentsPage = (): JSX.Element => {
     try {
       const token = localStorage.getItem("token");
       if (token !== null && token !== "") {
-        console.log(token);
+        console.log("Gotten token: " + token);
         const response = await api.get("/students", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: "Bearer " + token,
             "Content-Type": "application/json",
           },
         });
@@ -145,7 +145,7 @@ const StudentsPage = (): JSX.Element => {
 
   const addStudent = async (event: any) => {
     event.preventDefault();
-
+    const token = localStorage.getItem("token");
     const formData = {
       firstName: firstName,
       lastName: lastName,
@@ -153,7 +153,12 @@ const StudentsPage = (): JSX.Element => {
       dateOfBirth: dot,
     };
 
-    const response = await api.post("/students", formData);
+    const response = await api.post("/students", formData, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
 
     console.log(response);
 
